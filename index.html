@@ -24,7 +24,7 @@
     }
     .subtitle {
       font-style: italic;
-      opacity: 0.7
+      opacity: 0.7;
       margin-bottom: 3em;
     }
     .standings {
@@ -50,15 +50,18 @@
 <body>
   <h1>SPOAK</h1>
   <p class="subtitle"> The Society for Peoples Of All Kinds </p>
-  <div class="standings" id="standings></div>
+  <div class="standings" id="standings" role="list" aria-label="House standings"></div>
 
   <script>
     fetch('points.json')
       .then(response => response.json())
       .then(data => {
         const container = document.getElementById('standings');
-        div.className = 'house';
-        div.innerHTML =
+        Object.keys(data).sort().forEach(house => {
+          const div = document.createElement('div');
+          div.className = 'house';
+          div.setAttribute('role', 'listitem');
+          div.innerHTML =
           '<div class="house-name">' + house + '</div>' +
           '<div class="house-points">' + data[house] + '</div>;
         container.appendChild(div);
