@@ -17,6 +17,27 @@
       min-height: 100vh;
       justify-content: center;
     }
+    nav {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 2.5em;
+      padding: 1.2em 0;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+    }
+    nav a { color: #FFFFFF; text-decoration: none; opacity: 0.75; }
+    nav a:hover, nav a:focus { opacity: 1; text-decoration: underline; }
+    nav a[aria-current="page"] {opacity: 1; border-bottom: 1px solid #FFFFFF; }
+    main {
+      flex: 1;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      justify-content: center;
+      width: 100%;
+    }
     h1 {
       font-size: 2.5rem;
       letter-spacing: 0.3em;
@@ -52,9 +73,17 @@
   </style>
 </head>
 <body>
-  <h1>SPOAK</h1>
-  <p class="subtitle"> The Society for Peoples Of All Kinds </p>
-  <div class="standings" id="standings" role="list" aria-label="House standings"></div>
+  <nav>
+    <a href="index.html" aria-current="page">Standings</a>
+    <a href="lore.html"Houses>Houses</a>
+  </nav>
+
+  <main>
+    <h1>SPOAK</h1>
+    <p class="subtitle"> The Society for Peoples Of All Kinds </p>
+    <div class="standings" id="standings" role="list" aria-label="House standings"></div>
+  </main>
+
 
   <script>
     fetch('points.json')
