@@ -11,11 +11,10 @@
       background: #0f2e27;
       color: #FFFFFF;
       margin: 0;
+      min-height: 100vh;
       display: flex;
       flex-direction: column;
       align-items: center;
-      min-height: 100vh;
-      justify-content: center;
     }
     nav {
       width: 100%;
@@ -29,7 +28,7 @@
     }
     nav a { color: #FFFFFF; text-decoration: none; opacity: 0.75; }
     nav a:hover, nav a:focus { opacity: 1; text-decoration: underline; }
-    nav a[aria-current="page"] {opacity: 1; border-bottom: 1px solid #FFFFFF; }
+    nav a[aria-current="page"] { opacity: 1; border-bottom: 1px solid #FFFFFF; }
     main {
       flex: 1;
       display: flex;
@@ -37,6 +36,7 @@
       align-items: center;
       justify-content: center;
       width: 100%;
+      padding: 2em 0;
     }
     h1 {
       font-size: 2.5rem;
@@ -54,9 +54,7 @@
       flex-wrap: wrap;
       justify-content: center;
     }
-    .house {
-      text-align: center;
-    }
+    .house { text-align: center; }
     .house-name {
       font-size: 1.2rem;
       letter-spacing: 0.15em;
@@ -74,7 +72,7 @@
     .cup {
       width: 90px;
       height: 110px;
-      margin: 0.8em auto;
+      margin: 0.8em auto 0;
       position: relative;
       border: 2px solid rgba(255, 255, 255, 0.65);
       border-top: none;
@@ -85,7 +83,7 @@
       position: absolute;
       width: 10px;
       height: 10px;
-      border-radius: 50%
+      border-radius: 50%;
       transition: transform 0.55s cubic-bezier(0.3, 0.9, 0.55, 1.12);
     }
   </style>
@@ -124,7 +122,6 @@
       const top = 108 - size - row * 10;
       return { left: left, top: top };
     }
-
     function pourBeads(cup, count, color) {
       const maxVisible = 70; // cup capacity; the numeral stays the truth
       const n = Math.min(count, maxVisible);
@@ -157,8 +154,10 @@
           div.setAttribute('role', 'listitem');
           div.innerHTML =
           '<div class="house-name">' + house + '</div>' +
-          '<div class="house-points">' + data[house] + '</div>';
+          '<div class="house-points">' + data[house] + '</div>' +
+          '<div class="cup" aria-hidden="true"></div>';
         container.appendChild(div);
+        pourBeads(div.querySelector('.cup', data[house], COLORS[house] || '#FFFFFF');
       });
     });
   </script>
