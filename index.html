@@ -173,7 +173,7 @@
         for (let i = newCount; i < oldCount; i++) {
           const bead = makeBead(i, s, color);
           bead.style.transition = "transform 0.6s ease-in, opacity 0.6s ease-in";
-          cup.appendChild)bead);
+          cup.appendChild(bead);
           const delay = (i - newCount) * 60:
           setTimeout(() => {
             bead.style.transform = "translateY(-" + (CUP_H + 60) + "px)";
