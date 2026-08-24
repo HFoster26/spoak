@@ -3,9 +3,67 @@
 <head>
   <meta charset="UTF-8">
   <meta name="robots" content="noindex">
+  <meta name="viewport" content="width=device-width, intial-scale=1.0">
   <title>SPOAK</title>
+  <style>
+    body {
+      font-family: Georgia, serif;
+      background: #18453B;
+      color: #FFFFFF;
+      margin: 0;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+      min-height: 100vh;
+      justify-content: center;
+    }
+    h1 {
+      font-size: 2.5rem;
+      letter-spacing: 0.3em;
+      margin-bottom: 0.2em;
+    }
+    .subtitle {
+      font-style: italic;
+      opacity: 0.7
+      margin-bottom: 3em;
+    }
+    .standings {
+      display: flex;
+      gap: 3em;
+      flex-wrap: wrap;
+      justify-content: center;
+    }
+    .house {
+      text-align: center;
+    }
+    .house-name {
+      font-size: 1.2rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .house-points {
+      font-size: 3rem;
+      margin-top: 0.2em;
+    }
+  </style>
 </head>
 <body>
-  <p> The wheel turns.</p>
+  <h1>SPOAK</h1>
+  <p class="subtitle"> The Society for Peoples Of All Kinds </p>
+  <div class="standings" id="standings></div>
+
+  <script>
+    fetch('points.json')
+      .then(response => response.json())
+      .then(data => {
+        const container = document.getElementById('standings');
+        div.className = 'house';
+        div.innerHTML =
+          '<div class="house-name">' + house + '</div>' +
+          '<div class="house-points">' + data[house] + '</div>;
+        container.appendChild(div);
+      });
+    });
+  </script>
 </body>
 </html>
