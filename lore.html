@@ -1,0 +1,150 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPOAK — Houses</title>
+  <style>
+    body {
+      font-family: Georgia, serif;
+      background: #0f2e27;
+      color: #FFFFFF;
+      margin: 0;
+      min-height: 100vh;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    nav {
+      width: 100%;
+      display: flex;
+      justify-content: center;
+      gap: 2.5em;
+      padding: 1.2em 0;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-size: 0.85rem;
+    }
+    nav a { color: #FFFFFF; text-decoration: none; opacity: 0.75; }
+    nav a:hover, nav a:focus { opacity: 1; text-decoration: underline; }
+    nav a[aria-current="page"] { opacity: 1; border-bottom: 1px solid #FFFFFF; }
+    h1 { font-size: 2rem; letter-spacing: 0.3em; margin: 1.2em 0 1.5em; }
+    .emblems {
+      display: flex;
+      gap: 2em;
+      flex-wrap: wrap;
+      justify-content: center;
+      padding: 0 1em;
+    }
+    .emblem-btn {
+      font-family: inherit;
+      background: none;
+      color: #FFFFFF;
+      border: none;
+      cursor: pointer;
+      text-align: center;
+      padding: 0;
+    }
+    .emblem {
+      width: 110px;
+      height: 110px;
+      border: 2px solid;
+      border-radius: 8px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      font-size: 2.5rem;
+      margin: 0 auto 0.5em;
+    }
+    /* EMBLEM SLOT: replace the .emblem div's contents with an <img> when art exists.
+       Give each img alt text naming the emblem, e.g. alt="The Bugle emblem". */
+    .bugle   .emblem { border-color: #5797ff; color: #5797ff; }
+    .cedar   .emblem { border-color: #D4826B; color: #D4826B; }
+    .harp    .emblem { border-color: #3cc904; color: #3cc904; }
+    .lantern .emblem { border-color: #FFD24A; color: #FFD24A; }
+    .emblem-name {
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+      font-size: 1rem;
+    }
+    .panel {
+      max-width: 600px;
+      padding: 2em 1.5em;
+      margin: 2em 1em;
+      border-top: 1px solid rgba(255,255,255,0.3);
+    }
+    .panel h2 {
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-size: 1.3rem;
+      margin-top: 0;
+    }
+    .bugle-panel h2   { color: #5797ff; }
+    .cedar-panel h2   { color: #D4826B; }
+    .harp-panel h2    { color: #3cc904; }
+    .lantern-panel h2 { color: #FFD24A; }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <nav>
+    <a href="index.html">Standings</a>
+    <a href="lore.html" aria-current="page">Houses</a>
+  </nav>
+
+  <h1>THE HOUSES</h1>
+
+  <div class="emblems">
+    <button class="emblem-btn bugle" data-house="bugle" aria-expanded="false" aria-controls="panel-bugle">
+      <div class="emblem" aria-hidden="true">B</div>
+      <div class="emblem-name">Bugle</div>
+    </button>
+    <button class="emblem-btn cedar" data-house="cedar" aria-expanded="false" aria-controls="panel-cedar">
+      <div class="emblem" aria-hidden="true">C</div>
+      <div class="emblem-name">Cedar</div>
+    </button>
+    <button class="emblem-btn harp" data-house="harp" aria-expanded="false" aria-controls="panel-harp">
+      <div class="emblem" aria-hidden="true">H</div>
+      <div class="emblem-name">Harp</div>
+    </button>
+    <button class="emblem-btn lantern" data-house="lantern" aria-expanded="false" aria-controls="panel-lantern">
+      <div class="emblem" aria-hidden="true">L</div>
+      <div class="emblem-name">Lantern</div>
+    </button>
+  </div>
+
+  <section id="panel-bugle" class="panel bugle-panel hidden">
+    <h2>House Bugle</h2>
+    <p>[Bugle lore, values, and traditions go here.]</p>
+  </section>
+  <section id="panel-cedar" class="panel cedar-panel hidden">
+    <h2>House Cedar</h2>
+    <p>[Cedar lore, values, and traditions go here.]</p>
+  </section>
+  <section id="panel-harp" class="panel harp-panel hidden">
+    <h2>House Harp</h2>
+    <p>[Harp lore, values, and traditions go here.]</p>
+  </section>
+  <section id="panel-lantern" class="panel lantern-panel hidden">
+    <h2>House Lantern</h2>
+    <p>[Lantern lore, values, and traditions go here.]</p>
+  </section>
+
+  <script>
+    const buttons = document.querySelectorAll('.emblem-btn');
+    buttons.forEach(btn => {
+      btn.addEventListener('click', () => {
+        const target = document.getElementById('panel-' + btn.dataset.house);
+        const isOpen = !target.classList.contains('hidden');
+        document.querySelectorAll('.panel').forEach(p => p.classList.add('hidden'));
+        buttons.forEach(b => b.setAttribute('aria-expanded', 'false'));
+        if (!isOpen) {
+          target.classList.remove('hidden');
+          btn.setAttribute('aria-expanded', 'true');
+        }
+      });
+    });
+  </script>
+</body>
+</html>
