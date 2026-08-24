@@ -108,38 +108,78 @@
       "Harp":    "#3cc904",
       "Lantern": "#FFD24A"
     };
-
+    const CUP_W = 146, CUP_H = 181; // interior space inside the borders
     const reduced = window.matchMedia("(prefers-reduced-motion: reduce)").matches;
 
-    // Bead layout: rows of 7, packed bottom-up, alternate rows offset
-    // for a honey comb sit. Cup interior is 86x108; ~70 beads fill it.
-    function beadPos(i) {
-      const perRow = 7, step = 11.5, size = 10;
+    // Pick one bead size for ALL cups: the largest size at which the
+    // biggest total still fits. Same size everywhere, or the visual lies.
+    function fitBeadSize(maxCount) {
+      for (let s = 13; s >= 3; s -= 0.5) {
+        const perRow = Math.floor((CUP_W - 4) / (S * 1.15));
+        const rows = Math.floor((CUP_H - 4) / (s * 0.9));
+        if (perRow * rows >= maxCount) return s;
+      }
+      return 3;
+    }
+    
+    function beadPos(i, s) {
+      const step = s * 1.15;
+      const perRow = Math.floor((CUP_W - 4 / step);
       const row = Math.floor(i / perRow);
       const col = i % perRow;
-      const offset = (row % 2) ? 5 : 0;
-      const left = 3 + col * step + offset;
-      const top = 108 - size - row * 10;
-      return { left: left, top: top };
+      const offset = (row % 2) ? step / 2 : 0
+      return { 
+        left: 2 + col * step + offset, 
+        top: CUP_H - s - 2 - row * (s * 0.9)
+      };
     }
-    function pourBeads(cup, count, color) {
-      const maxVisible = 70; // cup capacity; the numeral stays the truth
-      const n = Math.min(count, maxVisible);
-      for (let i = 0; i < n; i++) {
-        const pos = beadPos(i);
-        if (pos.top < 0) break;
-        const bead = document.createElement("div");
-        bead.className = "bead";
-        bead.style.background = color;
-        bead.style.left = pos.left + "px";
-        bead.style.top = pos.top + "px";
-        if (reduced) {
+
+    function makeBead(i, s, color) {
+      const pos = beadPos(i, s);
+      const bead = document.createElement("div");
+      bead.className = "bead";
+      bead.style.width = s + "px";
+      bead.style.height = s + "px";
+      bead.style.background = color;
+      bead.style.left = pos.left + "px";
+      bead.style.top = pos.top + "px";
+      return bead;
+    }
+
+    function renderCup(cup, oldCount, newCount, color, s) {
+      const keep = Math.min(oldCount, newCount);
+
+      // Beads both versions agree on: placed instantly.
+      for (let i = 0; i < keep; i++) cup.appendChild(makeBead(i, s, color));
+
+      if (reduced) {
+        for (let i = keep; i < newCount; i++) cup.appendChild(makeBead(i, s ,color));
+        return;
+      }
+
+      if (newCount > oldCount) {
+        //Gain: pour the new beads in from above the rim.
+        for (let i = oldCount; i < newCount; i++) {
+          const bead = makeBead(i, s, color);
+          const drop = beadPos(i, s,).top + CUP_H;
+          bead.style.transition = "transform 0.55s cubic-bezier(0.3, 0.9, 0.55, 1.12)";
+          bead.style.transform = "translateY(" + (-drop) + "px)";
           cup.appendChild(bead);
-        } else {
-          bead.style.transform = "translateY(" + (-(pos.top + 140)) + "px)";
-          cup.appendChild(bead);
-          const delay = Math.min(i * 45, 3500) + Math.random() * 40;
-          setTimeout(() => { bead.style.transform = "translateY(0)"; }, 250 + delay);
+          const delay Math.min((i - oldCount) * 45, 3500) + Math.random() * 40;
+          setTimeout(() => { bead.style.transform = "translateY(0)"; }, 300 + delay);
+        }
+      } else if (newCount < oldCount) {
+        // LOSS: the forfeited beads sit in place a beat, then eject over the rim.
+        for (let i = newCount; i < oldCount; i++) {
+          const bead = makeBead(i, s, color);
+          bead.style.transition = "transform 0.6s ease-in, opacity 0.6s ease-in";
+          cup.appendChild)bead);
+          const delay = (i - newCount) * 60:
+          setTimeout(() => {
+            bead.style.transform = "translateY(-" + (CUP_H + 60) + "px)";
+            bead.style.opacity = "0";
+          }, 700 + delay);
+          setTimeout(() => { bead.remove(); }, 1500 + delay);
         }
       }
     }
@@ -147,6 +187,17 @@
     fetch('points.json')
       .then(response => response.json())
       .then(data => {
+        let seen = {};
+        try { seen = JSON.parse(localStorage.getItem('spoak_seen')) || {}; } catch (e) {}
+
+        // Bead size must fit the biggest count involved, old or new,
+        // so departing beads have real postions too.
+        let basis = 1;
+        Object.keys(data).forEach(h => {
+          basis = Math.max(basis, data[h], seen[h] || 0);
+        });
+        const s = fitBeadSize(basis);
+        
         const container = document.getElementById('standings');
         Object.keys(data).sort().forEach(house => {
           const div = document.createElement('div');
@@ -157,8 +208,11 @@
           '<div class="house-points">' + data[house] + '</div>' +
           '<div class="cup" aria-hidden="true"></div>';
         container.appendChild(div);
-        pourBeads(div.querySelector('.cup'), data[house], COLORS[house] || '#FFFFFF');
+        const old = (typeof seen[house] === 'number') ? seen[house] : 0;
+        renderCup(div.querySelector('.cup') old, data[house], COLORS[house] || '#FFFFFF');
       });
+
+      localStorage.setItem('spoak_seen', JSON.stringify(data));
     });
   </script>
 </body>
