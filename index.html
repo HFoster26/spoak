@@ -165,7 +165,7 @@
           bead.style.transition = "transform 0.55s cubic-bezier(0.3, 0.9, 0.55, 1.12)";
           bead.style.transform = "translateY(" + (-drop) + "px)";
           cup.appendChild(bead);
-          const delay Math.min((i - oldCount) * 45, 3500) + Math.random() * 40;
+          const delay = Math.min((i - oldCount) * 45, 3500) + Math.random() * 40;
           setTimeout(() => { bead.style.transform = "translateY(0)"; }, 300 + delay);
         }
       } else if (newCount < oldCount) {
