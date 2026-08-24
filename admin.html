@@ -1,0 +1,246 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8">
+  <meta name="robots" content="noindex">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>SPOAK — Ledger</title>
+  <style>
+    body {
+      font-family: Georgia, serif;
+      background: #0f2e27;
+      color: #FFFFFF;
+      margin: 0;
+      padding: 2em 1em;
+      display: flex;
+      flex-direction: column;
+      align-items: center;
+    }
+    h1 { font-size: 1.6rem; letter-spacing: 0.25em; margin: 0 0 1.5em; }
+    .houses {
+      display: flex;
+      gap: 1.5em;
+      flex-wrap: wrap;
+      justify-content: center;
+      margin-bottom: 2em;
+    }
+    .house { text-align: center; width: 130px; }
+    .house-name {
+      font-size: 1rem;
+      letter-spacing: 0.15em;
+      text-transform: uppercase;
+    }
+    .house-total { font-size: 2.2rem; margin: 0.2em 0 0.4em; }
+    .bugle   .house-total { color: #5797ff; }
+    .cedar   .house-total { color: #D4826B; }
+    .harp    .house-total { color: #3cc904; }
+    .lantern .house-total { color: #FFD24A; }
+    .house input {
+      width: 100%;
+      box-sizing: border-box;
+      font-size: 1.3rem;
+      font-family: inherit;
+      text-align: center;
+      padding: 0.4em;
+      border: 1px solid #FFFFFF;
+      border-radius: 4px;
+      background: #FFFFFF;
+      color: #0f2e27;
+    }
+    .preview { font-size: 0.9rem; min-height: 1.4em; margin-top: 0.4em; opacity: 0.85; }
+    button {
+      font-family: inherit;
+      font-size: 1.1rem;
+      padding: 0.6em 2.5em;
+      border: 1px solid #FFFFFF;
+      border-radius: 4px;
+      background: #FFFFFF;
+      color: #0f2e27;
+      cursor: pointer;
+    }
+    button:disabled { opacity: 0.5; cursor: default; }
+    #status { margin-top: 1.2em; min-height: 1.4em; font-size: 1rem; }
+    #token-panel { text-align: center; max-width: 320px; }
+    #token-panel input {
+      width: 100%;
+      box-sizing: border-box;
+      font-size: 1rem;
+      padding: 0.5em;
+      margin: 1em 0;
+      border-radius: 4px;
+      border: 1px solid #FFFFFF;
+    }
+    #forget {
+      margin-top: 2.5em;
+      font-size: 0.8rem;
+      opacity: 0.6;
+      background: none;
+      border: none;
+      color: #FFFFFF;
+      text-decoration: underline;
+      padding: 0;
+    }
+    .hidden { display: none; }
+  </style>
+</head>
+<body>
+  <h1>LEDGER</h1>
+
+  <div id="token-panel" class="hidden">
+    <label for="token-input">Paste the SPOAK access token to use this ledger on this device.</label>
+    <input id="token-input" type="password" autocomplete="off">
+    <button id="token-save">Unlock</button>
+  </div>
+
+  <div id="ledger" class="hidden">
+    <div class="houses" id="houses"></div>
+    <button id="save">Save</button>
+    <div id="status" role="status" aria-live="polite"></div>
+    <button id="forget">Forget token on this device</button>
+  </div>
+
+  <script>
+    const OWNER = 'hfoster26';
+    const REPO = 'spoak';
+    const FILE = 'points.json';
+    const API = 'https://api.github.com/repos/' + OWNER + '/' + REPO + '/contents/' + FILE;
+
+    let totals = {};
+    let sha = '';
+
+    const tokenPanel = document.getElementById('token-panel');
+    const ledger = document.getElementById('ledger');
+    const statusEl = document.getElementById('status');
+
+    function token() { return localStorage.getItem('spoak_token') || ''; }
+
+    function start() {
+      if (token()) { tokenPanel.classList.add('hidden'); ledger.classList.remove('hidden'); load(); }
+      else { ledger.classList.add('hidden'); tokenPanel.classList.remove('hidden'); }
+    }
+
+    document.getElementById('token-save').onclick = () => {
+      const t = document.getElementById('token-input').value.trim();
+      if (!t) return;
+      localStorage.setItem('spoak_token', t);
+      document.getElementById('token-input').value = '';
+      start();
+    };
+
+    document.getElementById('forget').onclick = () => {
+      localStorage.removeItem('spoak_token');
+      start();
+    };
+
+    function load() {
+      statusEl.textContent = 'Loading…';
+      fetch(API, { headers: { 'Authorization': 'Bearer ' + token(), 'Accept': 'application/vnd.github+json' } })
+        .then(r => {
+          if (r.status === 401) throw new Error('bad-token');
+          if (!r.ok) throw new Error('load-failed');
+          return r.json();
+        })
+        .then(file => {
+          sha = file.sha;
+          totals = JSON.parse(atob(file.content));
+          render();
+          statusEl.textContent = '';
+        })
+        .catch(err => {
+          if (err.message === 'bad-token') {
+            localStorage.removeItem('spoak_token');
+            start();
+            tokenPanel.querySelector('label').textContent = 'That token was rejected. Paste a valid SPOAK token.';
+          } else {
+            statusEl.textContent = 'Could not load points. Check connection and reload.';
+          }
+        });
+    }
+
+    function render() {
+      const wrap = document.getElementById('houses');
+      wrap.innerHTML = '';
+      Object.keys(totals).sort().forEach(house => {
+        const div = document.createElement('div');
+        div.className = 'house ' + house.toLowerCase();
+        div.innerHTML =
+          '<label class="house-name" for="in-' + house + '">' + house + '</label>' +
+          '<div class="house-total" id="total-' + house + '">' + totals[house] + '</div>' +
+          '<input id="in-' + house + '" type="number" inputmode="numeric" placeholder="0">' +
+          '<div class="preview" id="prev-' + house + '"></div>';
+        wrap.appendChild(div);
+        document.getElementById('in-' + house).addEventListener('input', () => preview(house));
+      });
+    }
+
+    function delta(house) {
+      const v = document.getElementById('in-' + house).value.trim();
+      if (v === '' || v === '-') return 0;
+      const n = parseInt(v, 10);
+      return isNaN(n) ? 0 : n;
+    }
+
+    function preview(house) {
+      const d = delta(house);
+      document.getElementById('prev-' + house).textContent =
+        d === 0 ? '' : '→ ' + (totals[house] + d);
+    }
+
+    document.getElementById('save').onclick = () => {
+      const changes = [];
+      const next = {};
+      Object.keys(totals).forEach(house => {
+        const d = delta(house);
+        next[house] = totals[house] + d;
+        if (d !== 0) changes.push(house + (d > 0 ? ' +' : ' ') + d);
+      });
+      if (changes.length === 0) { statusEl.textContent = 'Nothing to save.'; return; }
+
+      const body = {
+        message: changes.join(', '),
+        content: btoa(JSON.stringify(next, null, 2)),
+        sha: sha
+      };
+
+      document.getElementById('save').disabled = true;
+      statusEl.textContent = 'Saving…';
+
+      fetch(API, {
+        method: 'PUT',
+        headers: {
+          'Authorization': 'Bearer ' + token(),
+          'Accept': 'application/vnd.github+json',
+          'Content-Type': 'application/json'
+        },
+        body: JSON.stringify(body)
+      })
+        .then(r => {
+          if (r.status === 401) throw new Error('bad-token');
+          if (r.status === 409) throw new Error('conflict');
+          if (!r.ok) throw new Error('save-failed');
+          return r.json();
+        })
+        .then(result => {
+          sha = result.content.sha;
+          totals = next;
+          render();
+          statusEl.textContent = 'Saved: ' + body.message;
+        })
+        .catch(err => {
+          if (err.message === 'conflict') {
+            statusEl.textContent = 'The file changed elsewhere. Reloading totals — re-enter and save again.';
+            load();
+          } else if (err.message === 'bad-token') {
+            localStorage.removeItem('spoak_token');
+            start();
+          } else {
+            statusEl.textContent = 'Save failed. Check connection and try again.';
+          }
+        })
+        .finally(() => { document.getElementById('save').disabled = false; });
+    };
+
+    start();
+  </script>
+</body>
+</html>
