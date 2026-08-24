@@ -63,7 +63,7 @@
         const container = document.getElementById('standings');
         Object.keys(data).sort().forEach(house => {
           const div = document.createElement('div');
-          div.className = 'house' + house.toLowerCase();
+          div.className = 'house ' + house.toLowerCase();
           div.setAttribute('role', 'listitem');
           div.innerHTML =
           '<div class="house-name">' + house + '</div>' +
