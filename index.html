@@ -115,7 +115,7 @@
     // biggest total still fits. Same size everywhere, or the visual lies.
     function fitBeadSize(maxCount) {
       for (let s = 13; s >= 3; s -= 0.5) {
-        const perRow = Math.floor((CUP_W - 4) / (S * 1.15));
+        const perRow = Math.floor((CUP_W - 4) / (s * 1.15));
         const rows = Math.floor((CUP_H - 4) / (s * 0.9));
         if (perRow * rows >= maxCount) return s;
       }
