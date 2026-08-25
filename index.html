@@ -209,7 +209,7 @@
           '<div class="cup" aria-hidden="true"></div>';
         container.appendChild(div);
         const old = (typeof seen[house] === 'number') ? seen[house] : 0;
-        renderCup(div.querySelector('.cup') old, data[house], COLORS[house] || '#FFFFFF', s);
+        renderCup(div.querySelector('.cup'), old, data[house], COLORS[house] || '#FFFFFF', s);
       });
 
       localStorage.setItem('spoak_seen', JSON.stringify(data));
