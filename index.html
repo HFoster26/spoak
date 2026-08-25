@@ -43,19 +43,27 @@
       letter-spacing: 0.3em;
       margin-bottom: 0.2em;
     }
-     .hero {
+    .hero {
       width: 100%;
-      max-width: 900px;
-      margin-bottom: 2em;
+      max-width: 820px;
+      position: relative;
+      margin-bottom: 95px;
+      padding: 0 1em;
+      box-sizing: border-box;
     }
-    .hero img {
+    .hero img.scene {
       width: 100%;
       display: block;
+      border-radius: 6px;
+      box-shadow: 0 0 60px rgba(0, 0, 0, 0.55);
     }
-    .seal {
-      width: 150px;
-      display: block;
-      margin: 0 auto 1.5em;
+    .hero img.seal {
+      width: 170px;
+      position: absolute;
+      left: 50%;
+      bottom: -85px;
+      transform: translateX(-50%);
+      filter: drop-shadow(0 4px 14px rgba(0, 0, 0, 0.5));
     }
     .subtitle {
       font-style: italic;
@@ -107,14 +115,12 @@
 
   <main>
     <div class="hero">
-      <img src="founding-night.jpg"
+      <img class="scene" src="founding-night.jpg"
            alt="Four figures under a starry night: a man playing a bugle, a woman playing a harp, a man holding a glowing paper lantern, and a fourth figure dancing beneath a cedar tree.">
+      <img class="seal" src="spoak-seal-disc.png"
+           alt="The seal of the Society for Peoples Of All Kinds, established 1896. SPOAK.">
     </div>
-    <img class="seal" src="spoak-seal.png"
-         alt="The seal of the Society for Peoples Of All Kinds, established 1896.">
-    
-    <h1>SPOAK</h1>
-    <p class="subtitle"> The Society for Peoples Of All Kinds </p>
+    <p class="subtitle">The Society for Peoples Of All Kinds</p>
     <div class="standings" id="standings" role="list" aria-label="House standings"></div>
   </main>
 
