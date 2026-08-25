@@ -21,7 +21,7 @@
       display: flex;
       justify-content: center;
       gap: 2.5em;
-      padding: 1.2em 0;
+      padding: 1.4em 0;
       letter-spacing: 0.2em;
       text-transform: uppercase;
       font-size: 0.85rem;
@@ -29,7 +29,22 @@
     nav a { color: #FFFFFF; text-decoration: none; opacity: 0.75; }
     nav a:hover, nav a:focus { opacity: 1; text-decoration: underline; }
     nav a[aria-current="page"] { opacity: 1; border-bottom: 1px solid #FFFFFF; }
-    h1 { font-size: 2rem; letter-spacing: 0.3em; margin: 1.2em 0 1.5em; }
+    h1 { font-size: 2rem; letter-spacing: 0.3em; margin: 1.2em 0 1em; }
+    .origin {
+      max-width: 640px;
+      padding: 0 1.5em;
+      margin-bottom: 2.5em;
+      line-height: 1.7;
+    }
+    .origin p { margin: 0 0 1em; }
+    .origin .motto {
+      text-align: center;
+      letter-spacing: 0.2em;
+      text-transform: uppercase;
+      font-size: 0.95rem;
+      opacity: 0.8;
+      margin-top: 1.5em;
+    }
     .emblems {
       display: flex;
       gap: 2em;
@@ -57,8 +72,9 @@
       font-size: 2.5rem;
       margin: 0 auto 0.5em;
     }
-    /* EMBLEM SLOT: replace the .emblem div's contents with an <img> when art exists.
-       Give each img alt text naming the emblem, e.g. alt="The Bugle emblem". */
+    /* EMBLEM SLOT: when the seals exist, replace each .emblem div's
+       letter with an <img> — alt text naming the seal, e.g.
+       alt="The seal of Bugle House". */
     .bugle   .emblem { border-color: #5797ff; color: #5797ff; }
     .cedar   .emblem { border-color: #D4826B; color: #D4826B; }
     .harp    .emblem { border-color: #3cc904; color: #3cc904; }
@@ -69,16 +85,21 @@
       font-size: 1rem;
     }
     .panel {
-      max-width: 600px;
-      padding: 2em 1.5em;
-      margin: 2em 1em;
+      max-width: 640px;
+      padding: 2em 1.5em 1em;
+      margin: 2em 1em 1.5em;
       border-top: 1px solid rgba(255,255,255,0.3);
+      line-height: 1.7;
     }
     .panel h2 {
       letter-spacing: 0.2em;
       text-transform: uppercase;
       font-size: 1.3rem;
       margin-top: 0;
+    }
+    .panel .keeps {
+      font-style: italic;
+      opacity: 0.85;
     }
     .bugle-panel h2   { color: #5797ff; }
     .cedar-panel h2   { color: #D4826B; }
@@ -94,6 +115,35 @@
   </nav>
 
   <h1>THE HOUSES</h1>
+
+  <section class="origin" aria-label="The founding of the Society">
+    <p>In October of 1871, the year Michigan burned during the Chicago fires,
+    four travelers crossed a smoking state from four directions. Isaiah Turner,
+    a freedman and Union Army veteran, walking east toward NYC to see his friend
+    after his home burned down in Chicago. Wong Sum, who had laid track through 
+    the Sierra Nevada, walked with him; they met arguing a seller <em>up</em> 
+    on the price of a dead man's boots, out of respect for the dead man. 
+    Brigid Rourke came the other way from Boston, a widow with three children 
+    and a wagon she had learned to repair herself. And the fourth — whose name 
+    the Society has never learned and refers to as only the Keeper — was Anishinaabe,
+    of the people whose country this is, come back quietly through burned land for the
+    things the children had left behind.</p>
+        <p>They converged in Lansing, where a relief warehouse came down with a
+    schoolteacher and eleven children sheltering beside it. Turner and Wong
+    went into the wreckage before the dust settled. Brigid worked triage out
+    of her own wagon. And when one boy's fever needed what no store held, the
+    Keeper knew where things still grew. <em>We asked. They asked in return.
+    Both answers were yes.</em></p>
+    <p>Winter came early on a state that had spent its autumn burning. Four
+    strangers who had every reason to keep moving did not. What they did
+    instead — the pooling, the night classes, the teaching, the table — became
+    four households tangled together past unraveling, and twenty-five years
+    on, in 1896, it was their children who wrote it down and founded the
+    Society. Each chose a House. Not one chose the teaching of their own
+    parent. <em>"Because it isn't blood. If it were blood, it wouldn't be
+    teachable, and if it isn't teachable, what are we for?"</em></p>
+    <p class="motto">Four roads, one winter.</p>
+  </section>
 
   <div class="emblems">
     <button class="emblem-btn bugle" data-house="bugle" aria-expanded="false" aria-controls="panel-bugle">
@@ -115,20 +165,58 @@
   </div>
 
   <section id="panel-bugle" class="panel bugle-panel hidden">
-    <h2>House Bugle</h2>
-    <p>[Bugle lore, values, and traditions go here.]</p>
+    <h2>Bugle House</h2>
+    <p>Isaiah Turner taught himself letters from a stolen primer, and in the
+    founders' winter he taught reading in the relief hall to anyone who sat
+    down — and found half his pupils were grown men too proud to say why
+    they'd come. His conviction: you can keep the heart of a thing while
+    changing everything around it.</p>
+    <p class="keeps">Bugle House keeps Turner's discipline: that the heart of
+    a thing can cross any river if you can tell the heart from the baggage,
+    and that telling them apart is the hardest judgment there is. The bugle
+    was built to play four fixed calls; ask it kindly and it plays anything.
+    The instrument did not change. What it could say did.</p>
   </section>
+
   <section id="panel-cedar" class="panel cedar-panel hidden">
-    <h2>House Cedar</h2>
-    <p>[Cedar lore, values, and traditions go here.]</p>
+    <h2>Cedar House</h2>
+    <p>The Keeper came back through burned country for what the children had
+    left behind — toys, a cradleboard, small carved animals — because some
+    things, once lost entire, do not come back. Through the winter they
+    taught, walking, what the land still offered: which bark, which root,
+    which wood burned clean — knowledge that warmed households the cold had
+    finally made honest.</p>
+    <p class="keeps">Cedar House keeps the Keeper's discipline: that some
+    things must be kept exactly, because what is lost entire is lost forever,
+    and that keeping is work done mostly unseen and mostly unthanked. Cedar
+    endures the winter green, resists the fire, and shelters what grows
+    beneath it.</p>
   </section>
+
   <section id="panel-harp" class="panel harp-panel hidden">
-    <h2>House Harp</h2>
-    <p>[Harp lore, values, and traditions go here.]</p>
+    <h2>Harp House</h2>
+    <p>Brigid Rourke ran the winter's food pooling like a campaign — counting
+    everything, wasting nothing, posting the tallies where the whole town
+    could inspect them. <em>Charity that can't show its books,</em> she wrote,
+    <em>is charity that gets stopped.</em></p>
+    <p class="keeps">Harp House keeps Brigid's discipline: that everything
+    counts, that the books must balance and be seen to balance, that a life
+    is built out of acts that can stand inspection. The harp is the
+    instrument of the record — what is played is heard, and what is heard is
+    remembered.</p>
   </section>
+
   <section id="panel-lantern" class="panel lantern-panel hidden">
-    <h2>House Lantern</h2>
-    <p>[Lantern lore, values, and traditions go here.]</p>
+    <h2>Lantern House</h2>
+    <p>Wong Sum was everywhere that winter — mending what broke, carrying
+    what was heavy, sitting with the sick. When a delegation came one January
+    night to suggest the relief stores should feed the town's <em>own
+    kind</em> first, he stood in the doorway of the supply shed and said:
+    <em>"Everyone here is my kind. I checked."</em></p>
+    <p class="keeps">Lantern House keeps Wong's discipline: that the table is
+    the point, that everyone at it is your kind, and that the light you give
+    is oil you must also remember to refill. A lantern kept burning for one
+    night is a gesture. A lantern kept burning for thirty years is a life.</p>
   </section>
 
   <script>
